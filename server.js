@@ -66,7 +66,7 @@ app.get("/scrape", function (req, res) {
       db.Article.create(result)
         .then(function (dbArticle) {
           // View the added result in the console
-          console.log(dbArticle);
+          //console.log(dbArticle);
         })
         .catch(function (err) {
           // If an error occurred, log it
@@ -74,18 +74,27 @@ app.get("/scrape", function (req, res) {
         });
     });
 
-    // Send a message to the client
-    res.render("index", {});
+    
   });
+  // Send a message using handlebars (not working for me yet)
+  var confirm = {
+    message: "scrape complete"
+  }
+  res.render("index", confirm);
 });
 
 // Route for getting all Articles from the db
 app.get("/articles", function (req, res) {
   // TODO: Finish the route so it grabs all of the articles
   db.Article.find({}).then(function (response) {
-    res.json(response);
+    // response is an array, so we can leverage the #each in hbs
+    // syntax for object is:  {nameinhbs: your array}
+    console.log(response[0].title);
+    console.log(response[0].link)
+    res.render("index", {articleshbs: response});
+    
   });
-
+  
 });
 
 // Route for grabbing a specific Article by id, populate it with it's note
