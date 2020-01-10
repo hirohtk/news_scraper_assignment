@@ -77,10 +77,7 @@ app.get("/scrape", function (req, res) {
     
   });
   // Send a message using handlebars (not working for me yet)
-  var confirm = {
-    message: "scrape complete"
-  }
-  res.render("index", confirm);
+  res.render("index");
 });
 
 // Route for getting all Articles from the db
