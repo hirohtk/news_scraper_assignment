@@ -26,7 +26,7 @@ var app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// NOTE TO SELF:  I STILL NEED THIS- YOUR FRONT END JS GOES HERE... THIS IS WHY I HARDCODED DURING PROJECT 2.  
+// NOTE TO SELF:  I STILL NEED PUBLIC FOLDER- YOUR FRONT END JS GOES HERE... THIS IS WHY I HARDCODED DURING PROJECT 2.  
 // WHEN YOU DO THIS, IF YOU ARE LINKING SCRIPT IN HTML, PRETEND YOU'RE ALREADY IN PUBLIC.
 
 app.use(express.static("public"));
@@ -89,8 +89,7 @@ app.get("/articles", function (req, res) {
   db.Article.find({}).then(function (response) {
     // response is an array, so we can leverage the #each in hbs
     // syntax for object is:  {nameinhbs: your array}
-    console.log(response[0].title);
-    console.log(response[0].link)
+    
     res.render("index", {articleshbs: response});
     
   });
