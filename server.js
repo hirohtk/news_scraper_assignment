@@ -45,19 +45,15 @@ mongoose.connect("mongodb://localhost/scraperassignment", { useNewUrlParser: tru
 
 app.get("/", function (req, res) {
   // response is an array, so we can leverage the #each in hbs
-    // syntax for object is:  {nameinhbs: your array}
-    console.log("root route")
+  // syntax for object is:  {nameinhbs: your array}
+  console.log("root route")
   db.Article.find({}).then(function (response) {
     // this is just an array
-    console.log(response);
-    console.log("response 0 " + response[0]);
-    console.log("response 1 " + response[1]);
-    console.log("response 2 " + response[2]);
     // seem to be having luck when the response is only one object, but doesn't work when its an array of objects
     // GOAL:
-    //  res.render("index", {articleshbs: response});
-    // SOMETHING THAT WORKS:
-    res.render("index", {articleshbs: response[0]});
+    console.log(response[0].title)
+    console.log(response[0].link)
+    res.render("index", { articleshbs: response });
   });
 })
 
@@ -67,7 +63,7 @@ app.get("/scrape", function (req, res) {
 
     var $ = cheerio.load(response.data);
 
-    var result = {};
+    var resultArray = [];
 
     // THIS IS ESSENTAILLY A FOR LOOP, making a new result object for every headline
     $("ul").children().each(function (i, element) {
@@ -81,18 +77,22 @@ app.get("/scrape", function (req, res) {
         link: links
       }
 
-      db.Article.create(result)
-        .then(function (dbArticle) {
-          // View the added result in the console
-          //console.log(dbArticle);
-        })
-        .catch(function (err) {
-          // If an error occurred, log it
-          console.log(err);
-        });
+      resultArray.push(result);
     });
+    console.log(resultArray[0]);
+    console.log(resultArray[1]);
+    console.log(resultArray[2]);
+    db.Article.create(resultArray)
+      .then(function (dbArticle) {
+        // View the added result in the console
+        //console.log(dbArticle);
+      })
+      .catch(function (err) {
+        // If an error occurred, log it
+        console.log(err);
+      });
   });
-  res.json({scrape:"scrape done"});
+  res.json({ scrape: "scrape done" });
 });
 
 // Route for getting all Articles from the db
@@ -139,7 +139,7 @@ app.post("/articles/:id", function (req, res) {
   var article = req.params.id;
 
   db.Note.create(newNote).then(function (response) {
-    db.Article.findByIdAndUpdate(article, {$set: {note: response}}, function (err, done) {
+    db.Article.findByIdAndUpdate(article, { $set: { note: response } }, function (err, done) {
       if (err) {
         console.log(err);
       }
