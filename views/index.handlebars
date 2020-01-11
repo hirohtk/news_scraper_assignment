@@ -11,24 +11,25 @@
     <div class="row">
         <div id="articles">
             Articles Div
-            
+            <ul>
                 {{#each articleshbs}}
-
+                
                 <li>
-                    <h2>{{title}}</h2>
+                    <h2>{{this.title}}</h2>
                 </li>
-                <h2>Link: {{link}}</h2>
-
+                
+                    <h2>{{this.link}}</h2>
+                
+                
                 {{/each}}
-           
+            </ul>
+
+
 
         </div>
     </div>
     <div class="row">
-        <button id="scrapeButton">Scrape</button>
-        <br>
-       
-        <button id="getArticlesButton">Get Articles</button>
+        <button id="scrapeButton">Scrape/Get New Articles!</button>
         <br>
 
     </div>

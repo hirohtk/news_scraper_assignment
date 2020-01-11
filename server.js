@@ -39,8 +39,26 @@ mongoose.connect("mongodb://localhost/scraperassignment", { useNewUrlParser: tru
 
 // Routes
 
+// THIS IS WHAT IS RESPONSIBLE FOR RENDERING EVERYTHING IN HBS.  
+// NEED TO HAVE THIS CONSTANTLY DOING THE ARTICLE POPULATION.  IF LOAD PAGE AND NO SCRAPED ARTICLES, NO ARTICLES RENDER IS EXPECTED!
+// IF THERE IS STUFF IN THE DB HOWEVER, IT WILL RENDER.
+
 app.get("/", function (req, res) {
-    res.render("index");
+  // response is an array, so we can leverage the #each in hbs
+    // syntax for object is:  {nameinhbs: your array}
+    console.log("root route")
+  db.Article.find({}).then(function (response) {
+    // this is just an array
+    console.log(response);
+    console.log("response 0 " + response[0]);
+    console.log("response 1 " + response[1]);
+    console.log("response 2 " + response[2]);
+    // seem to be having luck when the response is only one object, but doesn't work when its an array of objects
+    // GOAL:
+    res.render("index", {articleshbs: response});
+    // SOMETHING THAT WORKS:
+    res.render("index", {articleshbs: response[0]});
+  });
 })
 
 app.get("/scrape", function (req, res) {
@@ -73,25 +91,19 @@ app.get("/scrape", function (req, res) {
           console.log(err);
         });
     });
-
-    
   });
-  // Send a message using handlebars (not working for me yet)
-  res.render("index");
+  res.json({scrape:"scrape done"});
 });
 
 // Route for getting all Articles from the db
-app.get("/articles", function (req, res) {
-  // TODO: Finish the route so it grabs all of the articles
-  db.Article.find({}).then(function (response) {
-    // response is an array, so we can leverage the #each in hbs
-    // syntax for object is:  {nameinhbs: your array}
-    
-    res.render("index", {articleshbs: response});
-    
-  });
-  
-});
+// NOT NEEDED:  AT ROOT ROUTE EVERYTHING THAT IS IN THE DB SHOULD DISPLAY
+
+// app.get("/articles", function (req, res) {
+//   db.Article.find({}).then(function (response) {
+//     console.log(response);
+//     res.render("index", );
+//   });
+// });
 
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function (req, res) {
