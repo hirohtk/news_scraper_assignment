@@ -55,7 +55,7 @@ app.get("/", function (req, res) {
     console.log("response 2 " + response[2]);
     // seem to be having luck when the response is only one object, but doesn't work when its an array of objects
     // GOAL:
-    res.render("index", {articleshbs: response});
+    //  res.render("index", {articleshbs: response});
     // SOMETHING THAT WORKS:
     res.render("index", {articleshbs: response[0]});
   });
