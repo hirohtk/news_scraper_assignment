@@ -17,7 +17,8 @@ $(document).ready(function () {
         const id = $(this).attr("data-id");
         console.log(id);
         $.get("/articles/" + id, {}, function (response) {
-            $("#yourNote").val(response.body)
+            $("#yourNote").val(response.note.body)
+            console.log(response.note.body)
         })
         submitNote();
     });
@@ -25,6 +26,24 @@ $(document).ready(function () {
     function submitNote () {
         $(".noteSubmit").on("click", function() {
             console.log("submit")
+            const yourNote = $("#yourNote").val().trim();
+            const id = $(this).attr("data-id");
+            console.log(yourNote);
+            console.log(id);
+            const objForBackEnd = {
+                body: yourNote,
+            }
+            $.post("/articles/" + id, objForBackEnd, function (response) {
+                $("#noteModal").modal("hide")
+                $(".noteSubmit").attr("data-id", "");
+                $(".noteSubmit").off("click");
+            });
+        });
+    }
+
+    function deleteNote () {
+        $(".noteDelete").on("click", function() {
+            console.log("Delete")
             const yourNote = $("#yourNote").val().trim();
             const id = $(this).attr("data-id");
             console.log(yourNote);

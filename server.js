@@ -117,27 +117,19 @@ app.get("/scrape", function (req, res) {
       });
   
   });
-  
-  
+
 });
-
-// Route for getting all Articles from the db
-// NOT NEEDED:  AT ROOT ROUTE EVERYTHING THAT IS IN THE DB SHOULD DISPLAY
-
-// app.get("/articles", function (req, res) {
-//   db.Article.find({}).then(function (response) {
-//     console.log(response);
-//     res.render("index", );
-//   });
-// });
 
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function (req, res) {
   var article = req.params.id;
-  //"Find this Article found by ID, and populate this with notes."
+    //"Find this Article found by ID, 
   db.Article.findById(article).
     populate("note")
+  // and populate this with *note* as defined in schema (would populate with more than one note, but in the schema 
+  // putting the object in array defines that.  here, we only have the object for a 1-1 relation )."
     .then(function (response) {
+      console.log("note response " + response);
       res.json(response);
     })
     .catch(function (err) {
@@ -147,13 +139,7 @@ app.get("/articles/:id", function (req, res) {
 
 // can also do db.Article.findOne({_id: req.params.id}).populate("note")
 
-// Route for saving/updating an Article's associated Note
 app.post("/articles/:id", function (req, res) {
-  // TODO
-  // ====
-  // save the new note that gets posted to the Notes collection
-  // then find an article from the req.params.id
-  // and update it's "note" property with the _id of the new note
 
   var newNote = req.body;
   var article = req.params.id;
@@ -161,8 +147,9 @@ app.post("/articles/:id", function (req, res) {
   console.log(article);
   db.Note.create(newNote).then(function (response) {
                                             // this response supposedly contains the info you sent in newNote
-                                            // this body is set in your schema/model
-    db.Article.findByIdAndUpdate(article, { $set: { body: response } }, function (err, done) {
+                                            // this *note* below is set in your schema/model for ARTICLE.  YOU ARE UPDATING ARTICLE BY ID, SETTING
+                                            // THE **ARTICLE's** note TO THIS POST.
+    db.Article.findByIdAndUpdate(article, { $set: { note: response } }, function (err, done) {
       if (err) {
         console.log(err);
       }
