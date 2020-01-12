@@ -134,7 +134,7 @@ app.get("/scrape", function (req, res) {
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function (req, res) {
   var article = req.params.id;
-
+  //"Find this Article found by ID, and populate this with notes."
   db.Article.findById(article).
     populate("note")
     .then(function (response) {

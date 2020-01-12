@@ -19,6 +19,10 @@ $(document).ready(function () {
         $.get("/articles/" + id, {}, function (response) {
             $("#yourNote").val(response.body)
         })
+        submitNote();
+    });
+
+    function submitNote () {
         $(".noteSubmit").on("click", function() {
             console.log("submit")
             const yourNote = $("#yourNote").val().trim();
@@ -29,10 +33,13 @@ $(document).ready(function () {
                 body: yourNote,
             }
             $.post("/articles/" + id, objForBackEnd, function (response) {
+                $("#noteModal").modal("hide")
+                $(".noteSubmit").attr("data-id", "");
+                $(".noteSubmit").off("click");
             });
         });
-    });
-
+    }
+    
     
     
 });
