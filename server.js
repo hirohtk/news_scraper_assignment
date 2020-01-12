@@ -129,7 +129,6 @@ app.get("/articles/:id", function (req, res) {
   // and populate this with *note* as defined in schema (would populate with more than one note, but in the schema 
   // putting the object in array defines that.  here, we only have the object for a 1-1 relation )."
     .then(function (response) {
-      console.log("note response " + response);
       res.json(response);
     })
     .catch(function (err) {
@@ -140,13 +139,10 @@ app.get("/articles/:id", function (req, res) {
 // can also do db.Article.findOne({_id: req.params.id}).populate("note")
 
 app.post("/articles/:id", function (req, res) {
-
   var newNote = req.body;
   var article = req.params.id;
-  console.log(newNote);
-  console.log(article);
   db.Note.create(newNote).then(function (response) {
-                                            // this response supposedly contains the info you sent in newNote
+                                            // this response is the ENTIRE NOTE DOCUMENT.  This is how the Article uses it below.
                                             // this *note* below is set in your schema/model for ARTICLE.  YOU ARE UPDATING ARTICLE BY ID, SETTING
                                             // THE **ARTICLE's** note TO THIS POST.
     db.Article.findByIdAndUpdate(article, { $set: { note: response } }, function (err, done) {
@@ -157,6 +153,18 @@ app.post("/articles/:id", function (req, res) {
     });
   });
   // can also do db.Article.findAndUpdateOne({_id: req.params.id} , ...)
+});
+
+app.get("/notedelete/:id", function (req, res) {
+  var note = req.params.id;
+  console.log("deleting the value of the note in " + note);
+    // Like the get route above, but I'm using the delete express method to do an mongoose update  method
+    db.Note.findByIdAndUpdate(note, { $set: { body: "" },}, function (err, done) {
+      if (err) {
+        console.log(err);
+      }
+      res.send(done);
+    });
 });
 
 // Start the server
