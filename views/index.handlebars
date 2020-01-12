@@ -11,36 +11,46 @@
     <div class="row">
 
         <div id="articles">
-            Articles Div
-
-            {{!-- <ul>
-                {{#each articleshbs  model as}}
-                
-                <li>
-                    <h2>{{this.title}}</h2>
-                    <h2>ddd</h2>
-                </li>
-                    <h2>{{this._id}}</h2>
-                    <h2>{{this.link}}</h2>
-                
-                
-                {{/each}}
-            </ul> --}}
-
             <ul>
                 {{#each articleshbs}}
-                <li>
-                    <p>{{title}}</p>
-                    <p>Link: {{link}}</p>
-                </li>
+                <div class="articleBox" data-id={{_id}} title="{{title}}" link={{link}}>
+                    <li>
+                        <p>{{title}}</p>
+                        <p>Link: {{link}}</p>
+                    </li>
+                </div>
                 {{else}}
                 <h1>No Articles Scraped yet!</h1>
                 {{/each}}
             </ul>
-
         </div>
     </div>
     <div class="row">
         <button id="scrapeButton">Get new articles</button>
+    </div>
+    <!-- Button trigger modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Your notes here...</label>
+                        <textarea class="form-control" id="yourNote" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary noteSubmit" id="#noteSubmit">Submit</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

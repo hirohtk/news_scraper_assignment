@@ -49,7 +49,7 @@ app.get("/", function (req, res) {
   db.Article.find({}).then(function (response) {
     var newArrayForHbs = [];
     if (response.length > 0) {
-      for (i = 0; i < response.length; i++) {
+      for (i = 0; i < 5; i++) {
         var subObj = {};
         subObj._id = response[i]._id;
         subObj.title = response[i].title;
@@ -133,12 +133,6 @@ app.get("/scrape", function (req, res) {
 
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function (req, res) {
-  // TODO
-  // ====
-  // Finish the route so it finds one article using the req.params.id,
-  // and run the populate method with "note",
-  // then responds with the article with the note included
-
   var article = req.params.id;
 
   db.Article.findById(article).
@@ -163,9 +157,12 @@ app.post("/articles/:id", function (req, res) {
 
   var newNote = req.body;
   var article = req.params.id;
-
+  console.log(newNote);
+  console.log(article);
   db.Note.create(newNote).then(function (response) {
-    db.Article.findByIdAndUpdate(article, { $set: { note: response } }, function (err, done) {
+                                            // this response supposedly contains the info you sent in newNote
+                                            // this body is set in your schema/model
+    db.Article.findByIdAndUpdate(article, { $set: { body: response } }, function (err, done) {
       if (err) {
         console.log(err);
       }
