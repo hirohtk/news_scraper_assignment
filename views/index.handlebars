@@ -13,21 +13,29 @@
         <div id="articles">
             Articles Div
             
-            <ul>
-                {{#each articleshbs}}
+            {{!-- <ul>
+                {{#each articleshbs  model as}}
                 
                 <li>
-                    <h2>{{articleshbs.title}}</h2>
+                    <h2>{{this.title}}</h2>
+                    <h2>ddd</h2>
                 </li>
-                
-                    <h2>{{articleshbs.link}}</h2>
+                    <h2>{{this._id}}</h2>
+                    <h2>{{this.link}}</h2>
                 
                 
                 {{/each}}
-            </ul>
+            </ul> --}}
 
+            <ul>
+                    {{#each articleshbs}}
 
-
+                    <li>
+                        <p>{{title}}</p>
+                        <p>Link: {{link}}</p>
+                    </li>
+                    {{/each}}
+                </ul>
         </div>
     </div>
     <div class="row">

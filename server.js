@@ -48,13 +48,44 @@ app.get("/", function (req, res) {
   // syntax for object is:  {nameinhbs: your array}
   console.log("root route")
   db.Article.find({}).then(function (response) {
-    // this is just an array
-    // seem to be having luck when the response is only one object, but doesn't work when its an array of objects
-    // GOAL:
     console.log(response[0].title)
     console.log(response[0].link)
-    res.render("index", { articleshbs: response });
+    console.log(response[0]._id);
+    console.log(response);
+    console.log("Response.length is " + response.length)
+
+    var newArrayForHbs = [];
+
+    for (i = 0; i < response.length; i++) {
+      var subObj = {};
+      subObj._id = response[i]._id;
+      subObj.title = response[i].title;
+      subObj.link = response[i].link;
+      newArrayForHbs.push(subObj);
+    }
+    console.log("New Array is " + newArrayForHbs);
+    console.log("New Array index 0 is " + newArrayForHbs[0]);
+    console.log("New Array index 0 title " + newArrayForHbs[0].title);
+    res.render("index", {articleshbs: newArrayForHbs});
+    // FOR SOME REASON I COULDN'T JUST GIVE response.  HAD TO MAKE NEW ARRAY TO LOOK SOMETHING LIKE THE BELOW.  NOT SURE WHY
   });
+  // { articleshbs: [
+  //   { title:
+  //      'Standing down: How Trump decided that not striking back was his best option on Iran',
+  //     link: '/en/article/h_c3507009208c455a2d569d8384c53daf',
+  //   },
+  //   {title: 'Opinion: Australian bushfires point to an ominous pattern',
+  //     link: '/en/article/h_d352a171f6d14de3519c9e26bb667a21',
+  //   },
+  //   {title:
+  //      'Secrets of an astonishingly well-preserved 2,600-year-old human brain',
+  //     link: '/en/article/h_14f0c8b1431066a725c29c27b46e4628',
+  //   },
+  //   {title:
+  //      'Disney\'s \'Frozen\' village gives tourists the cold shoulder',
+  //     link: '/en/article/h_d10947c1352cae204f3c8d6850cfce74',
+  //    },
+  // ]}
 })
 
 app.get("/scrape", function (req, res) {
