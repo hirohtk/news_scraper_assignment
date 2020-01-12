@@ -33,8 +33,7 @@ $(document).ready(function () {
                 $(".noteDelete").attr("data-note", noteId);
             }
         });
-        submitNote();
-        deleteNote();
+        
     });
 
     function submitNote() {
@@ -51,6 +50,7 @@ $(document).ready(function () {
                 console.log(response);
                 // this is the note ID
             });
+            submitNote();
         });
     }
 
@@ -65,9 +65,12 @@ $(document).ready(function () {
                 $(".noteDelete").attr("data-note", "");
                 $(".noteDelete").off("click");
             });
+            deleteNote();
         });
     }
 
+    submitNote();
+    deleteNote();
 
 
 });
