@@ -46,27 +46,22 @@ mongoose.connect("mongodb://localhost/scraperassignment", { useNewUrlParser: tru
 app.get("/", function (req, res) {
   // response is an array, so we can leverage the #each in hbs
   // syntax for object is:  {nameinhbs: your array}
-  console.log("root route")
   db.Article.find({}).then(function (response) {
-    console.log(response[0].title)
-    console.log(response[0].link)
-    console.log(response[0]._id);
-    console.log(response);
-    console.log("Response.length is " + response.length)
-
     var newArrayForHbs = [];
-
-    for (i = 0; i < response.length; i++) {
-      var subObj = {};
-      subObj._id = response[i]._id;
-      subObj.title = response[i].title;
-      subObj.link = response[i].link;
-      newArrayForHbs.push(subObj);
+    if (response.length > 0) {
+      for (i = 0; i < response.length; i++) {
+        var subObj = {};
+        subObj._id = response[i]._id;
+        subObj.title = response[i].title;
+        subObj.link = response[i].link;
+        newArrayForHbs.push(subObj);
+      }
+      res.render("index", { articleshbs: newArrayForHbs });
     }
-    console.log("New Array is " + newArrayForHbs);
-    console.log("New Array index 0 is " + newArrayForHbs[0]);
-    console.log("New Array index 0 title " + newArrayForHbs[0].title);
-    res.render("index", {articleshbs: newArrayForHbs});
+    else {
+      res.render("index", { articleshbs: newArrayForHbs });
+    }
+
     // FOR SOME REASON I COULDN'T JUST GIVE response.  HAD TO MAKE NEW ARRAY TO LOOK SOMETHING LIKE THE BELOW.  NOT SURE WHY
   });
   // { articleshbs: [
@@ -110,20 +105,20 @@ app.get("/scrape", function (req, res) {
 
       resultArray.push(result);
     });
-    console.log(resultArray[0]);
-    console.log(resultArray[1]);
-    console.log(resultArray[2]);
     db.Article.create(resultArray)
       .then(function (dbArticle) {
         // View the added result in the console
         //console.log(dbArticle);
+        res.json({ response: "test"});
       })
       .catch(function (err) {
         // If an error occurred, log it
         console.log(err);
       });
+  
   });
-  res.json({ scrape: "scrape done" });
+  
+  
 });
 
 // Route for getting all Articles from the db

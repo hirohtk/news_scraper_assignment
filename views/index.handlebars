@@ -9,10 +9,10 @@
         </div>
     </div>
     <div class="row">
-        
+
         <div id="articles">
             Articles Div
-            
+
             {{!-- <ul>
                 {{#each articleshbs  model as}}
                 
@@ -28,19 +28,19 @@
             </ul> --}}
 
             <ul>
-                    {{#each articleshbs}}
+                {{#each articleshbs}}
+                <li>
+                    <p>{{title}}</p>
+                    <p>Link: {{link}}</p>
+                </li>
+                {{else}}
+                <h1>No Articles Scraped yet!</h1>
+                {{/each}}
+            </ul>
 
-                    <li>
-                        <p>{{title}}</p>
-                        <p>Link: {{link}}</p>
-                    </li>
-                    {{/each}}
-                </ul>
         </div>
     </div>
     <div class="row">
         <button id="scrapeButton">Get new articles</button>
-        <br>
-
     </div>
 </div>
