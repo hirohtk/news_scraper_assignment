@@ -11,7 +11,7 @@ $(document).ready(function () {
     });
 
     $(".articleBox").on("click", function () {
-
+        $("#yourNote").val("");
         $("#noteModal").modal();
         // setting up information on the modal to use when posting
         $(".modal-title").text($(this).attr("title"));
@@ -25,19 +25,20 @@ $(document).ready(function () {
         var noteId;
         $.get("/articles/" + id, {}, function (response) {
             // if there is a note already in the db, then:
+            // which establishes a "noteId" which I stick to the article div for the delete function
             if (response.note) {
                 // show notes
                 $("#yourNote").val(response.note.body)
+                console.log("note.body response " + response.note.body);
                 noteId = response.note._id;
                 $("#" + id).attr("data-note", noteId);
                 $(".noteDelete").attr("data-note", noteId);
             }
+            //otherwise, don't set a "noteId"
         });
-        
-    });
 
-    function submitNote() {
-        $(".noteSubmit").on("click", function () {
+        $(".noteSubmit").one("click", function () {
+            console.log("Submit")
             const yourNote = $("#yourNote").val().trim();
             const id = $(this).attr("data-id");
             const objForBackEnd = {
@@ -47,15 +48,10 @@ $(document).ready(function () {
                 $("#noteModal").modal("hide")
                 $(".noteSubmit").attr("data-id", "");
                 $(".noteSubmit").off("click");
-                console.log(response);
-                // this is the note ID
             });
-            submitNote();
+            
         });
-    }
-
-    function deleteNote() {
-        $(".noteDelete").on("click", function () {
+        $(".noteDelete").one("click", function () {
             console.log("Delete")
             const id = $(this).attr("data-note");
             console.log(id);
@@ -65,12 +61,14 @@ $(document).ready(function () {
                 $(".noteDelete").attr("data-note", "");
                 $(".noteDelete").off("click");
             });
-            deleteNote();
+            
         });
-    }
+    });
 
-    submitNote();
-    deleteNote();
+    
+        
+    
 
+    
 
 });
