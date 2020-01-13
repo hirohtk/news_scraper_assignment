@@ -119,13 +119,13 @@ app.get("/scrape", function (req, res) {
       .then(function (dbArticle) {
         // View the added result in the console
         //console.log(dbArticle);
-        res.json({ response: "test"});
+        res.json({ response: "test" });
       })
       .catch(function (err) {
         // If an error occurred, log it
         console.log(err);
       });
-  
+
   });
 
 });
@@ -133,11 +133,11 @@ app.get("/scrape", function (req, res) {
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function (req, res) {
   var article = req.params.id;
-    //"Find this Article found by ID, 
+  //"Find this Article found by ID, 
   db.Article.findById(article).
     populate("note")
-  // and populate this with *note* as defined in schema (would populate with more than one note, but in the schema 
-  // putting the object in array defines that.  here, we only have the object for a 1-1 relation )."
+    // and populate this with *note* as defined in schema (would populate with more than one note, but in the schema 
+    // putting the object in array defines that.  here, we only have the object for a 1-1 relation )."
     .then(function (response) {
       res.json(response);
     })
@@ -152,9 +152,9 @@ app.post("/articles/:id", function (req, res) {
   var newNote = req.body;
   var article = req.params.id;
   db.Note.create(newNote).then(function (response) {
-                                            // this response is the ENTIRE NOTE DOCUMENT.  This is how the Article uses it below.
-                                            // this *note* below is set in your schema/model for ARTICLE.  YOU ARE UPDATING ARTICLE BY ID, SETTING
-                                            // THE **ARTICLE's** note TO THIS POST.
+    // this response is the ENTIRE NOTE DOCUMENT.  This is how the Article uses it below.
+    // this *note* below is set in your schema/model for ARTICLE.  YOU ARE UPDATING ARTICLE BY ID, SETTING
+    // THE **ARTICLE's** note TO THIS POST.
     db.Article.findByIdAndUpdate(article, { $set: { note: response } }, function (err, done) {
       if (err) {
         console.log(err);
@@ -168,19 +168,52 @@ app.post("/articles/:id", function (req, res) {
 app.get("/notedelete/:id", function (req, res) {
   var note = req.params.id;
   console.log("deleting the value of the note in " + note);
-    // Like the get route above, but I'm using the delete express method to do an mongoose update  method
-    db.Note.findByIdAndUpdate(note, { $set: { body: "" },}, function (err, done) {
-      if (err) {
-        console.log(err);
-      }
-      res.send(done);
-    });
+  // Like the get route above, but I'm using the delete express method to do an mongoose update  method
+  db.Note.findByIdAndUpdate(note, { $set: { body: "" }, }, function (err, done) {
+    if (err) {
+      console.log(err);
+    }
+    res.send(done);
+  });
 });
 
+app.put("/favorite/:id", function (req, res) {
+  var article = req.params.id;
+  console.log(article);
+  db.Article.findByIdAndUpdate(article, { $set: { saved: true } }, function (err, done) {
+    if (err) {
+      console.log(err);
+    }
+    res.send(done);
+  });
+  // can also do db.Article.findAndUpdateOne({_id: req.params.id} , ...)
+});
 
 app.delete("/delete", function (req, res) {
   db.Article.deleteMany({}, function (err) {
     res.send("done deleting everything")
+  });
+});
+
+app.get("/saved", function (req, res) {
+  // response is an array, so we can leverage the #each in hbs
+  // syntax for object is:  {nameinhbs: your array}
+  db.Article.find({saved: true}).then(function (response) {
+    var newArrayForHbs = [];
+    if (response.length > 0) {
+      for (i = 0; i < response.length; i++) {
+        var subObj = {};
+        subObj._id = response[i]._id;
+        subObj.title = response[i].title;
+        subObj.link = "http://lite.cnn.io" + response[i].link;
+        newArrayForHbs.push(subObj);
+      }
+      res.render("saved", { articleshbs: newArrayForHbs });
+    }
+    else {
+      res.render("saved", { articleshbs: newArrayForHbs });
+    }
+    // FOR SOME REASON I COULDN'T JUST GIVE response.  HAD TO MAKE NEW ARRAY TO LOOK SOMETHING LIKE THE BELOW.  NOT SURE WHY
   });
 });
 

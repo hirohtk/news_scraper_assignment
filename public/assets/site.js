@@ -28,6 +28,20 @@ $(document).ready(function () {
             });
     });
 
+    $(".fa-star").on("click", function () {
+        console.log("star clicked")
+        const id = $(this).parent().parent().parent().attr("data-id");
+        console.log("id from front end " + id);
+        $.ajax({
+            url: "/favorite/" + id,
+            method: "PUT",
+          })
+            .then(function(response) {
+                $('[data-id=' + id + ']').remove();
+                //window.location.replace("/");
+            });
+    });
+
     $(".fa-comment-dots").on("click", function () {
         $("#yourNote").val("");
         $("#noteModal").modal();
@@ -50,6 +64,7 @@ $(document).ready(function () {
                 console.log("note.body response " + response.note.body);
                 noteId = response.note._id;
                 $("#" + id).attr("data-note", noteId);
+                $("#" + id).attr("note", response.note.body);
                 $(".noteDelete").attr("data-note", noteId);
             }
             //otherwise, don't set a "noteId"
