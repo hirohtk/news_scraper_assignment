@@ -32,13 +32,16 @@ $(document).ready(function () {
         console.log("star clicked")
         const id = $(this).parent().parent().parent().attr("data-id");
         console.log("id from front end " + id);
+        let thisForPromiseBelow = $(this);
         $.ajax({
             url: "/favorite/" + id,
             method: "PUT",
           })
             .then(function(response) {
-                $('[data-id=' + id + ']').remove();
-                //window.location.replace("/");
+                // $('[data-id=' + id + ']').addClass("hidden");
+                // this shouldn't affect the saved ones becuase those are rendered every time you visit that page, and they are rendered
+                // without this hidden class 
+                thisForPromiseBelow.addClass("favorite");
             });
     });
 
@@ -50,7 +53,7 @@ $(document).ready(function () {
         $(".noteSubmit").attr("data-id", $(this).parent().parent().parent().attr("data-id"));
         // setting up information on the modal to use when posting
         const id = $(this).parent().parent().parent().attr("data-id");
-
+        let thisForPromiseBelow = $(this);
         // setting up a regular id that is the same as data-id so I can use it in the get 
         $(this).attr("id", $(this).parent().parent().parent().attr("data-id"));
 
@@ -82,6 +85,7 @@ $(document).ready(function () {
                 $(".noteSubmit").attr("data-id", "");
                 $(".noteSubmit").off("click");
             });
+            thisForPromiseBelow.css("color", "green");
             
         });
         $(".noteDelete").one("click", function () {

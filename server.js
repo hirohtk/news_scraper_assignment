@@ -50,11 +50,17 @@ app.get("/", function (req, res) {
   db.Article.find({}).then(function (response) {
     var newArrayForHbs = [];
     if (response.length > 0) {
-      for (i = 0; i < 5; i++) {
+      for (i = 0; i < 8; i++) {
         var subObj = {};
         subObj._id = response[i]._id;
         subObj.title = response[i].title;
         subObj.link = "http://lite.cnn.io" + response[i].link;
+        if (response[i].saved) {
+          subObj.saved = "color:goldenrod";
+        }
+        if (response[i].note) {
+          subObj.noted = "color:green";
+        }
         newArrayForHbs.push(subObj);
       }
       res.render("index", { articleshbs: newArrayForHbs });
@@ -206,6 +212,9 @@ app.get("/saved", function (req, res) {
         subObj._id = response[i]._id;
         subObj.title = response[i].title;
         subObj.link = "http://lite.cnn.io" + response[i].link;
+        if (response[i].note) {
+          subObj.noted = "color:green";
+        }
         newArrayForHbs.push(subObj);
       }
       res.render("saved", { articleshbs: newArrayForHbs });
