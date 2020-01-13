@@ -43,7 +43,6 @@ mongoose.connect("mongodb://localhost/scraperassignment", { useNewUrlParser: tru
 // NEED TO HAVE THIS CONSTANTLY DOING THE ARTICLE POPULATION.  IF LOAD PAGE AND NO SCRAPED ARTICLES, NO ARTICLES RENDER IS EXPECTED!
 // IF THERE IS STUFF IN THE DB HOWEVER, IT WILL RENDER.
 
-
 app.get("/", function (req, res) {
   // response is an array, so we can leverage the #each in hbs
   // syntax for object is:  {nameinhbs: your array}
@@ -58,10 +57,33 @@ app.get("/", function (req, res) {
         if (response[i].saved) {
           subObj.saved = "color:goldenrod";
         }
-        if (response[i].note) {
+        if (response[i].note != undefined) {
           subObj.noted = "color:green";
         }
-        newArrayForHbs.push(subObj);
+        // THE ISSUE WITH THE ABOVE IS IF THE NOTE IS DELETED, IT WILL STILL SHOW GREEN.  
+        // ATTEMPT AT FINDING THE ASSOCIATED NOTE AND CHECKING LENGTH IS BELOW.  RAN OUT OF TIME TROUBLESHOOTING THIS, BUT FEEL I AM CLOSE.
+        // if (response[i].note != undefined) {
+        //   console.log("note in db is " + response[i].note)
+        //   db.Article.findById(response[i]._id).
+        //     populate("note")
+        //     // and populate this with *note* as defined in schema (would populate with more than one note, but in the schema 
+        //     // putting the object in array defines that.  here, we only have the object for a 1-1 relation )."
+        //     .then(function (response) {
+        //       console.log("note response is " + response.note.body);
+        //       console.log("length "+ response.note.body.length)
+        //       // if response[i].note is not undefined, but is empty, add this style then push object
+        //       if (response.note.body.length != 0) {
+        //         subObj.noted = "color:green";
+        //         newArrayForHbs.push(subObj);
+        //       }
+        //     })
+        //     .catch(function (err) {
+        //       res.json(err);
+        //     });
+        // }
+          newArrayForHbs.push(subObj);
+        
+        // if response[i].note is undefined, just push the object
       }
       res.render("index", { articleshbs: newArrayForHbs });
     }
@@ -204,7 +226,7 @@ app.delete("/delete", function (req, res) {
 app.get("/saved", function (req, res) {
   // response is an array, so we can leverage the #each in hbs
   // syntax for object is:  {nameinhbs: your array}
-  db.Article.find({saved: true}).then(function (response) {
+  db.Article.find({ saved: true }).then(function (response) {
     var newArrayForHbs = [];
     if (response.length > 0) {
       for (i = 0; i < response.length; i++) {
@@ -212,7 +234,8 @@ app.get("/saved", function (req, res) {
         subObj._id = response[i]._id;
         subObj.title = response[i].title;
         subObj.link = "http://lite.cnn.io" + response[i].link;
-        if (response[i].note) {
+        // making sure we can make the comment green if a comment already exists 
+        if (response[i].note != undefined) {
           subObj.noted = "color:green";
         }
         newArrayForHbs.push(subObj);

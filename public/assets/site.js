@@ -85,6 +85,7 @@ $(document).ready(function () {
                 $(".noteSubmit").attr("data-id", "");
                 $(".noteSubmit").off("click");
             });
+            // dynamically making the comment icon green.  when page refreshes this css should already be there due to the route
             thisForPromiseBelow.css("color", "green");
             
         });
@@ -98,7 +99,7 @@ $(document).ready(function () {
                 $(".noteDelete").attr("data-note", "");
                 $(".noteDelete").off("click");
             });
-            
+            thisForPromiseBelow.css("color", "black");
         });
     });
 

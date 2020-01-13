@@ -13,7 +13,7 @@
                         <button id="deleteEverythingButton">Delete all Articles (Includes Saved Articles)</button>
                     </li>
                     <li class="nav-item">
-                        <button id="savedArticlesButton"><a href="/saved">Saved Articles</a></button>
+                        <button id="savedArticlesButton"><a href="/saved" id="removeAnchorEffects">Saved Articles</a></button>
                     </li>
                 </ul>
             </div>
@@ -26,8 +26,8 @@
                 {{#each articleshbs}}
                 <div class="articleBox" data-id={{_id}} title="{{title}}" link={{link}}>
                     <li>
-                        <p>{{title}} <i class="fas fa-comment-dots" style={{noted}}></i></p> 
-                        <p>Link: <a href={{link}}>{{link}}</a></p>
+                        <p class="titleText">{{title}} <i class="fas fa-comment-dots" style={{noted}}></i></p> 
+                        <p><a href={{link}}>{{link}}</a></p>
                     </li>
                 </div>
                 <br>
