@@ -54,7 +54,7 @@ app.get("/", function (req, res) {
         var subObj = {};
         subObj._id = response[i]._id;
         subObj.title = response[i].title;
-        subObj.link = response[i].link;
+        subObj.link = "http://lite.cnn.io" + response[i].link;
         newArrayForHbs.push(subObj);
       }
       res.render("index", { articleshbs: newArrayForHbs });
@@ -103,7 +103,16 @@ app.get("/scrape", function (req, res) {
         title: titles,
         link: links
       }
-
+      // nested axios to scrape one level down - unsuccessful OR CNN is preventing me from scraping further.  
+      axios.get("http://lite.cnn.io/en" + "/" + links).then(function (response) {
+        var $ = cheerio.load(response.data);
+        console.log($(".afe4286c").find("p").text());
+        $(".afe4286c").find("p").each(function (i, element) {
+          var paragraph = $(element).text();
+          console.log("paragraph is " + paragraph)
+        })
+      });
+      // nest
       resultArray.push(result);
     });
     db.Article.create(resultArray)
@@ -171,7 +180,7 @@ app.get("/notedelete/:id", function (req, res) {
 
 app.delete("/delete", function (req, res) {
   db.Article.deleteMany({}, function (err) {
-    
+    res.send("done deleting everything")
   });
 });
 

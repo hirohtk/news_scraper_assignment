@@ -3,7 +3,7 @@
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
                 <h1 class="display-4">News Scraper - Explore the Latest CNN Headlines</h1>
-                <p class="lead">Click on an article to comment
+                <p class="lead">Click on the Icons to comment on the article, or to save it.
                 </p>
                 <ul class="nav">
                     <li class="nav-item">
@@ -26,10 +26,11 @@
                 {{#each articleshbs}}
                 <div class="articleBox" data-id={{_id}} title="{{title}}" link={{link}}>
                     <li>
-                        <p>{{title}} <i class="fas fa-star"></i></p> <i class="fas fa-comment-dots"></i>
-                        <p>Link: {{link}}</p>
+                        <p>{{title}} <i class="fas fa-star"></i><i class="fas fa-comment-dots"></i></p> 
+                        <p>Link: <a href={{link}}>{{link}}</a></p>
                     </li>
                 </div>
+                <br>
                 {{else}}
                 <h1>No Articles Scraped yet!</h1>
                 {{/each}}

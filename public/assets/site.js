@@ -19,25 +19,26 @@ $(document).ready(function () {
     $("#deleteEverythingButton").on("click", function () {
         console.log("delete everything");
         $.ajax({
-            url: "/delete/",
+            url: "/delete",
             method: "DELETE",
           })
-            .then(function() {
+            .then(function(response) {
+                console.log(response);
                 window.location.replace("/");
             });
     });
 
-    $(".articleBox").on("click", function () {
+    $(".fa-comment-dots").on("click", function () {
         $("#yourNote").val("");
         $("#noteModal").modal();
         // setting up information on the modal to use when posting
-        $(".modal-title").text($(this).attr("title"));
-        $(".noteSubmit").attr("data-id", $(this).attr("data-id"));
+        $(".modal-title").text($(this).parent().parent().parent().attr("title"));
+        $(".noteSubmit").attr("data-id", $(this).parent().parent().parent().attr("data-id"));
         // setting up information on the modal to use when posting
-        const id = $(this).attr("data-id");
+        const id = $(this).parent().parent().parent().attr("data-id");
 
         // setting up a regular id that is the same as data-id so I can use it in the get 
-        $(this).attr("id", $(this).attr("data-id"));
+        $(this).attr("id", $(this).parent().parent().parent().attr("data-id"));
 
         var noteId;
         $.get("/articles/" + id, {}, function (response) {
