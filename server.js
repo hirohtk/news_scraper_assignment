@@ -43,6 +43,7 @@ mongoose.connect("mongodb://localhost/scraperassignment", { useNewUrlParser: tru
 // NEED TO HAVE THIS CONSTANTLY DOING THE ARTICLE POPULATION.  IF LOAD PAGE AND NO SCRAPED ARTICLES, NO ARTICLES RENDER IS EXPECTED!
 // IF THERE IS STUFF IN THE DB HOWEVER, IT WILL RENDER.
 
+
 app.get("/", function (req, res) {
   // response is an array, so we can leverage the #each in hbs
   // syntax for object is:  {nameinhbs: your array}
@@ -165,6 +166,13 @@ app.get("/notedelete/:id", function (req, res) {
       }
       res.send(done);
     });
+});
+
+
+app.delete("/delete", function (req, res) {
+  db.Article.deleteMany({}, function (err) {
+    
+  });
 });
 
 // Start the server
