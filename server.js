@@ -90,7 +90,9 @@ app.get("/", function (req, res) {
         // }
 
         }
-        newArrayForHbs.push(subObj);
+        else {
+          newArrayForHbs.push(subObj);
+        }
         //  THE ISSUE WITH THE ABOVE IS IF THE NOTE IS DELETED, IT WILL STILL SHOW GREEN.  
       }
       res.render("index", { articleshbs: newArrayForHbs });
