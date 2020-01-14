@@ -59,7 +59,7 @@ app.get("/", function (req, res) {
         }
         if (response[i].note != undefined) {
           subObj.noted = "color:green";
-
+          newArrayForHbs.push(subObj);
         // if (response[i].note != undefined) {
         //   console.log("note in db is " + response[i].note)
         //   db.Article.findById(response[i]._id).
@@ -86,6 +86,7 @@ app.get("/", function (req, res) {
         // }
 
         }
+        newArrayForHbs.push(subObj);
         //  THE ISSUE WITH THE ABOVE IS IF THE NOTE IS DELETED, IT WILL STILL SHOW GREEN.  
       }
       res.render("index", { articleshbs: newArrayForHbs });
