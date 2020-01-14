@@ -35,7 +35,11 @@ app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 // Connect to the Mongo DB named scraperassignment
-mongoose.connect("mongodb://localhost/scraperassignment", { useNewUrlParser: true });
+// mongoose.connect("mongodb://localhost/scraperassignment", { useNewUrlParser: true });
+
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scraperassignment";
+
+mongoose.connect(MONGODB_URI);
 
 // Routes
 
