@@ -59,9 +59,7 @@ app.get("/", function (req, res) {
         }
         if (response[i].note != undefined) {
           subObj.noted = "color:green";
-        }
-        // THE ISSUE WITH THE ABOVE IS IF THE NOTE IS DELETED, IT WILL STILL SHOW GREEN.  
-        // ATTEMPT AT FINDING THE ASSOCIATED NOTE AND CHECKING LENGTH IS BELOW.  RAN OUT OF TIME TROUBLESHOOTING THIS, BUT FEEL I AM CLOSE.
+
         // if (response[i].note != undefined) {
         //   console.log("note in db is " + response[i].note)
         //   db.Article.findById(response[i]._id).
@@ -70,9 +68,10 @@ app.get("/", function (req, res) {
         //     // putting the object in array defines that.  here, we only have the object for a 1-1 relation )."
         //     .then(function (response) {
         //       console.log("note response is " + response.note.body);
-        //       console.log("length "+ response.note.body.length)
+        //       console.log("length " + response.note.body.length)
         //       // if response[i].note is not undefined, but is empty, add this style then push object
         //       if (response.note.body.length != 0) {
+        //         console.log("We got one that should be green");
         //         subObj.noted = "color:green";
         //         newArrayForHbs.push(subObj);
         //       }
@@ -80,15 +79,19 @@ app.get("/", function (req, res) {
         //     .catch(function (err) {
         //       res.json(err);
         //     });
+        // } else {
+        //   // if response[i].note is undefined, just push the object
+        //     console.log("This should be black");
+        //     newArrayForHbs.push(subObj);
         // }
-          newArrayForHbs.push(subObj);
-        
-        // if response[i].note is undefined, just push the object
+
+        }
+        //  THE ISSUE WITH THE ABOVE IS IF THE NOTE IS DELETED, IT WILL STILL SHOW GREEN.  
       }
       res.render("index", { articleshbs: newArrayForHbs });
     }
     else {
-      res.render("index", { articleshbs: newArrayForHbs });
+      res.render("index", {});
     }
 
     // FOR SOME REASON I COULDN'T JUST GIVE response.  HAD TO MAKE NEW ARRAY TO LOOK SOMETHING LIKE THE BELOW.  NOT SURE WHY
